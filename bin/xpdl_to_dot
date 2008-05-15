@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+$: << './lib'
+
+require 'openwfe/trans/xpdl'
+
+if ARGV.length < 1
+  puts
+  puts "  bin/xpdl_to_dot {xpdl_file_path}"
+  puts
+  puts "    attempts to turn an XPDL file to a DOT file"
+  puts "    (http://www.graphviz.org)"
+  puts
+  exit 1
+end
+
+graphs = OpenWFE::Trans::XPDL.parse ARGV[0]
+puts graphs.first.to_dot
+

@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns:ibpm="http://fujitsu.com/ibpm1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:deprecated="http://www.wfmc.org/2002/XPDL1.0" xmlns:xpdl="http://www.wfmc.org/2004/XPDL2.0alpha" xmlns:simulation="http://www.tibco.com/xpd/Simulation1.0.1" Id="175" Name="TroubleTicketMain" xsi:schemaLocation="http://www.wfmc.org/2004/XPDL2.0alpha http://www.wfmc.org/standards/docs/TC-1025_bpmnxpdl_24.xsd">
+   <!--
+
+     this XPDL file was created by Keith Swenson
+
+     http://kswenson.wordpress.com/2008/01/01/human-process-trouble-ticket/
+
+   -->
+   <PackageHeader>
+      <XPDLVersion>2.0</XPDLVersion>
+      <Vendor>Fujitsu</Vendor>
+      <Created>Tue Jan 01 11:26:12 PST 2008</Created>
+   </PackageHeader>
+   <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+   <Script Type="text/javascript"/>
+   <Participants>
+      <Participant Id="bpm" Name="bpm">
+         <ParticipantType Type="RESOURCE"/>
+      </Participant>
+      <Participant Id="Development" Name="Development">
+         <ParticipantType Type="ROLE"/>
+      </Participant>
+      <Participant Id="QA" Name="QA">
+         <ParticipantType Type="ROLE"/>
+      </Participant>
+      <Participant Id="CustomerSupport" Name="Customer Support">
+         <ParticipantType Type="ROLE"/>
+      </Participant>
+   </Participants>
+   <Pools>
+      <Pool BoundaryVisible="false" Id="1" Name="" Orientation="HORIZONTAL" Process="175">
+         <Lanes>
+            <Lane Id="Lane0" Name="Customer Support">
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="#FFFF00" Height="181.0" Width="873.0">
+                     <Coordinates XCoordinate="-3.0" YCoordinate="26.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Lane>
+            <Lane Id="Lane1" Name="QA">
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="#FFBBDD" Height="158.0" Width="874.0">
+                     <Coordinates XCoordinate="-1.0" YCoordinate="205.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Lane>
+            <Lane Id="Lane2" Name="Development">
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="#BBFFFF" Height="188.0" Width="875.0">
+                     <Coordinates XCoordinate="0.0" YCoordinate="359.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Lane>
+         </Lanes>
+         <NodeGraphicsInfos>
+            <NodeGraphicsInfo Height="547.0" Page="1" Width="875.0">
+               <Coordinates XCoordinate="0.0" YCoordinate="0.0"/>
+            </NodeGraphicsInfo>
+         </NodeGraphicsInfos>
+      </Pool>
+   </Pools>
+   <WorkflowProcesses>
+      <WorkflowProcess AccessLevel="PUBLIC" Id="175" Name="TroubleTicketMain">
+         <ProcessHeader DurationUnit="s"/>
+         <RedefinableHeader PublicationStatus="UNDER_TEST">
+            <Author>bpm</Author>
+            <Version>3.0</Version>
+            <Responsibles>
+               <Responsible>bpm</Responsible>
+            </Responsibles>
+         </RedefinableHeader>
+         <DataFields/>
+         <Activities>
+            <Activity Id="187" Name="Start">
+               <Event>
+                  <StartEvent Trigger="None"/>
+               </Event>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="216"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="0"/>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="60" ypos="91"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="60.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="60.0">
+                     <Coordinates XCoordinate="29.0" YCoordinate="61.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="186" Name="Enter Details">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>Customer Support</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="215"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="Submit" Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="170" ypos="94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="117.0" YCoordinate="60.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="185" Name="Reproduce Problem">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>QA</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="214"/>
+                           <TransitionRef Id="202"/>
+                           <TransitionRef Id="201"/>
+                           <TransitionRef Id="200"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="Cannot reproduce" Probability="0.0"/>
+                           <Connector Name="Known solution" Probability="33.333332"/>
+                           <Connector Name="Duplicate" Probability="33.333332"/>
+                           <Connector Name="Reproduced" Probability="33.333332"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="171" ypos="274"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="118.0" YCoordinate="240.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="184" Name="Correct Report">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>Customer Support</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="199"/>
+                           <TransitionRef Id="198"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="Submit" Probability="0.0"/>
+                           <Connector Name="Give Up" Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="371" ypos="94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="318.0" YCoordinate="60.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="183" Name="Conditional5">
+               <Route GatewayType="XOR"/>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="197"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="5"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="." Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="471" ypos="155"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="PrivateData">
+                     <ibpm:PrivateData>
+                        <CondSplitPrivateData conditionAttribute="">
+                           <CondSplitBranchInfo arrowLabel="." comparisionOperandValue="0" comparisionValue="0" isDefault="true" ordinal="l"/>
+                        </CondSplitPrivateData>
+                     </ibpm:PrivateData>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="36.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="28.0">
+                     <Coordinates XCoordinate="462.0" YCoordinate="155.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="182" Name="Verify">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>QA</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="196"/>
+                           <TransitionRef Id="195"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="Fixed" Probability="100.0"/>
+                           <Connector Name="Not Fixed" Probability="0.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="419" ypos="274"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="366.0" YCoordinate="240.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="181" Name="Resolution">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>Development</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="194"/>
+                           <TransitionRef Id="193"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="Fixed" Probability="0.0"/>
+                           <Connector Name="Not a bug" Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="323" ypos="470"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="270.0" YCoordinate="436.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="180" Name="Activity_18">
+               <Route GatewayType="AND"/>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="AND"/>
+                     <Split Type="AND">
+                        <TransitionRefs>
+                           <TransitionRef Id="192"/>
+                           <TransitionRef Id="191"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="4"/>
+                  <xpdl:ExtendedAttribute Name="SplitSimulationData">
+                     <simulation:SplitSimulationData>
+                        <simulation:ParameterDeterminedSplit>true</simulation:ParameterDeterminedSplit>
+                        <simulation:SplitParameter ParameterId=""/>
+                     </simulation:SplitSimulationData>
+                  </xpdl:ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="523" ypos="155"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="36.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="28.0">
+                     <Coordinates XCoordinate="521.0" YCoordinate="155.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="179" Name="Communicate Results">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>Customer Support</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="190"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="." Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="629" ypos="94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="576.0" YCoordinate="60.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="178" Name="Audit">
+               <Implementation>
+                  <No/>
+               </Implementation>
+               <Performer>QA</Performer>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="189"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="2"/>
+                  <ExtendedAttribute Name="ExpandGroups" Value="true"/>
+                  <ExtendedAttribute Name="Simulation">
+                     <ibpm:Simulation>
+                        <Duration>3600000</Duration>
+                        <Resources/>
+                        <Connectors>
+                           <Connector Name="." Probability="100.0"/>
+                        </Connectors>
+                     </ibpm:Simulation>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="629" ypos="274"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="68.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="102.0">
+                     <Coordinates XCoordinate="576.0" YCoordinate="240.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="177" Name="Activity_24">
+               <Route GatewayType="AND"/>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="AND"/>
+                     <Split Type="XOR">
+                        <TransitionRefs>
+                           <TransitionRef Id="188"/>
+                        </TransitionRefs>
+                     </Split>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="4"/>
+                  <xpdl:ExtendedAttribute Name="SplitSimulationData">
+                     <simulation:SplitSimulationData>
+                        <simulation:ParameterDeterminedSplit>true</simulation:ParameterDeterminedSplit>
+                        <simulation:SplitParameter ParameterId=""/>
+                     </simulation:SplitSimulationData>
+                  </xpdl:ExtendedAttribute>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="708" ypos="155"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="36.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="28.0">
+                     <Coordinates XCoordinate="706.0" YCoordinate="155.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+            <Activity Id="176" Name="Exit">
+               <Event>
+                  <EndEvent/>
+               </Event>
+               <TransitionRestrictions>
+                  <TransitionRestriction>
+                     <Join Type="XOR"/>
+                  </TransitionRestriction>
+               </TransitionRestrictions>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="NodeType" Value="1"/>
+                  <ExtendedAttribute Name="Coordinates">
+                     <ibpm:Coordinates xpos="789" ypos="457"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <NodeGraphicsInfos>
+                  <NodeGraphicsInfo FillColor="light blue" Height="60.0" IsVisible="true" LaneId="1" Page="1" ToolId="Interstage Business Process Manager" Width="60.0">
+                     <Coordinates XCoordinate="758.0" YCoordinate="427.0"/>
+                  </NodeGraphicsInfo>
+               </NodeGraphicsInfos>
+            </Activity>
+         </Activities>
+         <Transitions>
+            <Transition From="187" Id="216" Name="." To="186">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="95" ypos="94"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="117" ypos="94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="95.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="117.0" YCoordinate="94.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="186" Id="215" Name="Submit" To="185">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="151" ypos="128"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="152" ypos="240"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="151,184,152,184"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="151.0" YCoordinate="128.0"/>
+                     <Coordinates XCoordinate="151.0" YCoordinate="184.0"/>
+                     <Coordinates XCoordinate="152.0" YCoordinate="184.0"/>
+                     <Coordinates XCoordinate="152.0" YCoordinate="240.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="185" Id="214" Name="Cannot reproduce" To="184">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="220" ypos="257"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="318" ypos="94"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="268,257,268,94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="220.0" YCoordinate="257.0"/>
+                     <Coordinates XCoordinate="268.0" YCoordinate="257.0"/>
+                     <Coordinates XCoordinate="268.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="318.0" YCoordinate="94.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="185" Id="202" Name="Known solution" To="183">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="220" ypos="274"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="462" ypos="173"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="340,274,340,173"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="220.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="340.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="340.0" YCoordinate="173.0"/>
+                     <Coordinates XCoordinate="462.0" YCoordinate="173.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="185" Id="201" Name="Duplicate" To="182">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="220" ypos="291"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="366" ypos="291"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="220.0" YCoordinate="291.0"/>
+                     <Coordinates XCoordinate="366.0" YCoordinate="291.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="185" Id="200" Name="Reproduced" To="181">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="152" ypos="308"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="270" ypos="470"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="152,470"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="152.0" YCoordinate="308.0"/>
+                     <Coordinates XCoordinate="152.0" YCoordinate="470.0"/>
+                     <Coordinates XCoordinate="270.0" YCoordinate="470.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="184" Id="199" Name="Submit" To="185">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="318" ypos="77"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="186" ypos="240"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="246,77,246,149,186,149"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="318.0" YCoordinate="77.0"/>
+                     <Coordinates XCoordinate="246.0" YCoordinate="77.0"/>
+                     <Coordinates XCoordinate="246.0" YCoordinate="149.0"/>
+                     <Coordinates XCoordinate="186.0" YCoordinate="149.0"/>
+                     <Coordinates XCoordinate="186.0" YCoordinate="240.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="184" Id="198" Name="Give Up" To="183">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="420" ypos="94"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="480" ypos="155"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="480,94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="420.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="480.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="480.0" YCoordinate="155.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="183" Id="197" Name="." To="180">
+               <Condition Type="OTHERWISE">
+                  <Expression>==0</Expression>
+               </Condition>
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="498" ypos="173"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="521" ypos="173"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="508,173,508,172"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="498.0" YCoordinate="173.0"/>
+                     <Coordinates XCoordinate="508.0" YCoordinate="173.0"/>
+                     <Coordinates XCoordinate="508.0" YCoordinate="172.0"/>
+                     <Coordinates XCoordinate="521.0" YCoordinate="173.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="182" Id="196" Name="Fixed" To="183">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="434" ypos="240"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="480" ypos="191"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="434,220,480,220"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="434.0" YCoordinate="240.0"/>
+                     <Coordinates XCoordinate="434.0" YCoordinate="220.0"/>
+                     <Coordinates XCoordinate="480.0" YCoordinate="220.0"/>
+                     <Coordinates XCoordinate="480.0" YCoordinate="191.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="182" Id="195" Name="Not Fixed" To="181">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="468" ypos="274"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="372" ypos="487"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="501,274,501,487"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="468.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="501.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="501.0" YCoordinate="487.0"/>
+                     <Coordinates XCoordinate="372.0" YCoordinate="487.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="181" Id="194" Name="Fixed" To="182">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="372" ypos="453"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="400" ypos="308"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="400,453"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="372.0" YCoordinate="453.0"/>
+                     <Coordinates XCoordinate="400.0" YCoordinate="453.0"/>
+                     <Coordinates XCoordinate="400.0" YCoordinate="308.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="181" Id="193" Name="Not a bug" To="182">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="372" ypos="470"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="451" ypos="308"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="451,470"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="372.0" YCoordinate="470.0"/>
+                     <Coordinates XCoordinate="451.0" YCoordinate="470.0"/>
+                     <Coordinates XCoordinate="451.0" YCoordinate="308.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="180" Id="192" Name="." To="179">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="539" ypos="155"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="576" ypos="94"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="539,94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="539.0" YCoordinate="155.0"/>
+                     <Coordinates XCoordinate="539.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="576.0" YCoordinate="94.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="180" Id="191" Name="." To="178">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="539" ypos="191"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="576" ypos="274"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="539,274"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="539.0" YCoordinate="191.0"/>
+                     <Coordinates XCoordinate="539.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="576.0" YCoordinate="274.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="179" Id="190" Name="." To="177">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="678" ypos="94"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="724" ypos="155"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="724,94"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="678.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="724.0" YCoordinate="94.0"/>
+                     <Coordinates XCoordinate="724.0" YCoordinate="155.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="178" Id="189" Name="." To="177">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="678" ypos="274"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="724" ypos="191"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="724,274"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="678.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="724.0" YCoordinate="274.0"/>
+                     <Coordinates XCoordinate="724.0" YCoordinate="191.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+            <Transition From="177" Id="188" Name="." To="176">
+               <ExtendedAttributes>
+                  <ExtendedAttribute Name="StartPoint">
+                     <ibpm:StartPoint xpos="742" ypos="173"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="EndPoint">
+                     <ibpm:EndPoint xpos="791" ypos="427"/>
+                  </ExtendedAttribute>
+                  <ExtendedAttribute Name="ViewerScript">
+                     <ibpm:ViewerScript Value="791,173"/>
+                  </ExtendedAttribute>
+               </ExtendedAttributes>
+               <ConnectorGraphicsInfos>
+                  <ConnectorGraphicsInfo FillColor="light blue" IsVisible="true" Page="1">
+                     <Coordinates XCoordinate="742.0" YCoordinate="173.0"/>
+                     <Coordinates XCoordinate="791.0" YCoordinate="173.0"/>
+                     <Coordinates XCoordinate="791.0" YCoordinate="427.0"/>
+                  </ConnectorGraphicsInfo>
+               </ConnectorGraphicsInfos>
+            </Transition>
+         </Transitions>
+         <ExtendedAttributes>
+            <ExtendedAttribute Name="ProcessDefinitionId" Value="175"/>
+            <ExtendedAttribute Name="ProcessTypeId" Value="0"/>
+            <ExtendedAttribute Name="State" Value="0"/>
+            <ExtendedAttribute Name="SWIM_LANES">
+               <ibpm:SWIM_LANES>
+                  <SWIM_LANE Name="Customer Support">
+                     <CoordinateX>-3</CoordinateX>
+                     <CoordinateY>26</CoordinateY>
+                     <Width>873</Width>
+                     <Height>181</Height>
+                     <ColorR>255</ColorR>
+                     <ColorG>255</ColorG>
+                     <ColorB>0</ColorB>
+                     <Type>1</Type>
+                  </SWIM_LANE>
+                  <SWIM_LANE Name="QA">
+                     <CoordinateX>-1</CoordinateX>
+                     <CoordinateY>205</CoordinateY>
+                     <Width>874</Width>
+                     <Height>158</Height>
+                     <ColorR>255</ColorR>
+                     <ColorG>187</ColorG>
+                     <ColorB>221</ColorB>
+                     <Type>1</Type>
+                  </SWIM_LANE>
+                  <SWIM_LANE Name="Development">
+                     <CoordinateX>0</CoordinateX>
+                     <CoordinateY>359</CoordinateY>
+                     <Width>875</Width>
+                     <Height>188</Height>
+                     <ColorR>187</ColorR>
+                     <ColorG>255</ColorG>
+                     <ColorB>255</ColorB>
+                     <Type>1</Type>
+                  </SWIM_LANE>
+               </ibpm:SWIM_LANES>
+            </ExtendedAttribute>
+            <ExtendedAttribute Name="ANNOTATIONS">
+               <ibpm:ANNOTATIONS/>
+            </ExtendedAttribute>
+         </ExtendedAttributes>
+      </WorkflowProcess>
+   </WorkflowProcesses>
+   <ExtendedAttributes>
+      <ExtendedAttribute Name="Build" Value="8.2 IF820030"/>
+      <ExtendedAttribute Name="System" Value="KSWENSON-T4020Flow"/>
+   </ExtendedAttributes>
+</Package>
