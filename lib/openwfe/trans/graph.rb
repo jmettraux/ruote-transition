@@ -170,7 +170,7 @@ module Trans
     #
     def next_from (place)
 
-      @places[out_transitions(place).first.to]
+      out_transitions(place).collect { |tr| @places[tr.to] }
     end
 
     #
@@ -188,7 +188,7 @@ module Trans
       s << "node [shape = \"rectangle\", style = \"rounded\"];\n"
 
       @places.values.each do |pl|
-        s << "\"#{pl.eid}\" [ label = \"#{pl.label}\" ];\n"
+        s << "\"#{pl.eid}\" [ label = \"#{pl.label} (#{pl.eid})\" ];\n"
       end
 
       @transitions.values.each do |t|
@@ -199,7 +199,7 @@ module Trans
         split_xor = (details == [ :split, :xor ])
 
         s << "\"#{t.from}\" -> \"#{t.to}\""
-        s << " [ label = \"#{t.label}\""
+        s << " [ label = \"#{t.label} (#{t.eid})\""
         s << ", arrowtail = \"ediamond\"" if split_xor
         s << " ];\n"
       end

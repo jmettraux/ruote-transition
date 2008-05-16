@@ -46,10 +46,6 @@ module Trans
   #
   class StepCompiler
 
-    class Element
-      attr_accessor :seen
-    end
-
     #
     # compiles a graph to an OpenWFEru tree
     #
@@ -64,12 +60,24 @@ module Trans
 
         @graph = graph
 
-        @current_children = []
-
         @tree = [ 
           'process-definition', 
           { 'name' => 'none', 'revision' => 'none' }, 
-          @current_children ]
+          [] ]
+
+        @current_expression = @tree
+
+        @seen_places = []
+      end
+
+      def current_exp_name
+
+        @current_expression.first
+      end
+
+      def current_children
+
+        @current_expression.last
       end
 
       def compile
@@ -78,25 +86,74 @@ module Trans
           consider_place pl
         end
 
-        @tree.inspect
+        @tree
+      end
+
+      def move_to (expression)
+
+        @current_expression = expression
+      end
+
+      def move_to_root
+
+        move_to @tree
+      end
+
+      def enter_sequence
+
+        seq = [ 'sequence', {},  [] ]
+        current_children << seq
+        move_to seq
+      end
+
+      def enter_subprocess (place)
+
+        sub = [ 'process-definition', { 'name' => place.eid }, [] ]
+        current_children << sub
+        move_to sub
+
+        @graph.next_from(place).each do |pl|
+          consider_place pl
+        end
       end
 
       def consider_place (place)
 
-        part = [ 'participant', { 'ref' => place.label }, nil ]
+        return if @seen_places.include?(place.eid)
+
+        @seen_places << place.eid
+
+        part = [ 
+          'participant', 
+          { 'ref' => place.eid, 'activity' => place.label }, [] ]
+
         out = @graph.out_transitions place
 
         if out.size == 1
 
-          seq = [ 'sequence', {},  [ part ] ]
-          @current_children << seq
-          @current_chldren = seq.last
+          enter_sequence unless current_exp_name == 'sequence'
 
-          consider_place @graph.next_from(place)
+          current_children << part
+          
+          consider_place @graph.next_from(place).first
+
+        elsif out.size > 1
+
+          step = [ 
+            'step', 
+            { 
+              'step' => place.eid, 
+              'outcomes' => out.collect { |tr| tr.to }.join(", ") }, 
+            [] ]
+
+          current_children << step
+
+          move_to_root
+          enter_subprocess place
 
         else
 
-          @current_children << part
+          current_children << part
         end
       end
   end

@@ -1,10 +1,16 @@
 #!/usr/bin/env ruby
 
+$: << '../ruote/lib'
 $: << './lib'
 
 require 'optparse'
+
 require 'openwfe/trans/xpdl'
 require 'openwfe/trans/compiler'
+
+require 'rubygems'
+require 'openwfe/expool/parser'
+
 
 if ARGV.length < 1
   puts
@@ -16,5 +22,9 @@ if ARGV.length < 1
 end
 
 graphs = OpenWFE::Trans::XPDL.parse ARGV[0]
-p OpenWFE::Trans::StepCompiler.compile(graphs.first)
+
+tree = OpenWFE::Trans::StepCompiler.compile(graphs.first)
+
+puts OpenWFE::ExpressionTree.to_s(tree, 3)
+
 
