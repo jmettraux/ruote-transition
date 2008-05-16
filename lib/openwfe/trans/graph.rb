@@ -135,6 +135,45 @@ module Trans
     end
 
     #
+    # returns places that have no incoming transitions
+    #
+    def find_start_places
+
+      pls = @places.dup
+      
+      @transitions.values.each do |t|
+        pls.delete t.to
+      end
+
+      pls.values
+    end
+
+    #
+    # given a place, lists outgoing transitions
+    #
+    def out_transitions (place)
+
+      transitions.values.select { |tr| tr.from == place.eid }
+    end
+
+    #
+    # given a place, lists incoming transitions
+    #
+    def in_transitions (place)
+
+      transitions.values.select { |tr| tr.in == place.eid }
+    end
+
+    #
+    # returns the next place from the given one, will follow the first
+    # transition available.
+    #
+    def next_from (place)
+
+      @places[out_transitions(place).first.to]
+    end
+
+    #
     # outputs the graph in the DOT format
     #
     # http://graphviz.org

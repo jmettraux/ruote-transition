@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+$: << './lib'
+
+require 'optparse'
+require 'openwfe/trans/xpdl'
+require 'openwfe/trans/compiler'
+
+if ARGV.length < 1
+  puts
+  puts "  bin/xpdl_to_owfe {xpdl_file_path}"
+  puts
+  puts "    attempts to turn an XPDL file to an OpenWFEru process definition"
+  puts
+  exit 1
+end
+
+graphs = OpenWFE::Trans::XPDL.parse ARGV[0]
+p OpenWFE::Trans::StepCompiler.compile(graphs.first)
+
