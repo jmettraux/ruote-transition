@@ -92,7 +92,7 @@ module OpenWFE::Trans
 
         parser.listen(:start_element, ['TransitionRef']) do |u, l, q, a|
 
-          place.transitions[a['Id']] = t_restriction.dup
+          place.transition_details[a['Id']] = t_restriction #.dup() ...
         end
 
         parser.listen(:start_element, ['Transition']) do |u, l, q, a|

@@ -67,14 +67,14 @@ module Trans
     #
     # storing info like { transition_eid => [ :split, :and ] }
     #
-    attr_accessor :transitions
+    attr_accessor :transition_details
 
 
     def initialize (eid, label, original_name, attributes)
 
       super
 
-      @transitions = {}
+      @transition_details = {}
     end
   end
 
@@ -143,17 +143,26 @@ module Trans
 
       s = ""
       
-      s << "digraph #{self.class.name} {\n"
+      s << "digraph \"#{self.class.name}\" {\n"
       s << "rankdir=LR;\n"
       s << "size=\"8,5\";\n"
-      s << "node [shape = cirle];\n"
+      s << "node [shape = \"rectangle\", style = \"rounded\"];\n"
 
       @places.values.each do |pl|
         s << "\"#{pl.eid}\" [ label = \"#{pl.label}\" ];\n"
       end
 
       @transitions.values.each do |t|
-        s << "\"#{t.from}\" -> \"#{t.to}\" [ label = \"#{t.label}\" ];\n"
+
+        from_place = @places[t.from]
+        details = from_place ? from_place.transition_details[t.eid] : nil
+
+        split_xor = (details == [ :split, :xor ])
+
+        s << "\"#{t.from}\" -> \"#{t.to}\""
+        s << " [ label = \"#{t.label}\""
+        s << ", arrowtail = \"ediamond\"" if split_xor
+        s << " ];\n"
       end
 
       s << "}\n"
