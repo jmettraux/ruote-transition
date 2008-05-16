@@ -76,6 +76,16 @@ module Trans
 
       @transition_details = {}
     end
+
+    def transition_types (direction)
+
+      split, join = @transition_details.values.partition do |detail|
+        detail.first == :split
+      end
+
+      r = (direction == :split or direction == :out) ? split : join
+      r.collect { |e| e.last }.uniq
+    end
   end
 
   #

@@ -1,4 +1,3 @@
-
 #
 #--
 # Copyright (c) 2008, John Mettraux, OpenWFE.org
@@ -83,7 +82,7 @@ module Trans
       def compile
 
         @graph.find_start_places.each do |pl| 
-          consider_place pl
+          handle_place pl
         end
 
         @tree
@@ -99,25 +98,23 @@ module Trans
         move_to @tree
       end
 
-      def enter_sequence
+      def start (expname, atts={})
 
-        seq = [ 'sequence', {},  [] ]
+        seq = [ expname, atts,  [] ]
         current_children << seq
         move_to seq
       end
 
-      def enter_subprocess (place)
+      def start_subprocess (place)
 
-        sub = [ 'process-definition', { 'name' => place.eid }, [] ]
-        current_children << sub
-        move_to sub
+        start 'process-definition', { 'name' => place.eid }
 
         @graph.next_from(place).each do |pl|
-          consider_place pl
+          handle_place pl
         end
       end
 
-      def consider_place (place)
+      def handle_place (place)
 
         return if @seen_places.include?(place.eid)
 
@@ -131,11 +128,24 @@ module Trans
 
         if out.size == 1
 
-          enter_sequence unless current_exp_name == 'sequence'
+          start('sequence') unless current_exp_name == 'sequence'
 
           current_children << part
           
-          consider_place @graph.next_from(place).first
+          handle_place @graph.next_from(place).first
+
+        elsif out.size > 1 and place.transition_types(:out) == [ :and ]
+
+          current_children << part
+
+          start('concurrence')
+
+          con = @current_expression
+
+          @graph.next_from(place).each do |pl|
+            handle_place pl
+            move_to con
+          end
 
         elsif out.size > 1
 
@@ -149,7 +159,7 @@ module Trans
           current_children << step
 
           move_to_root
-          enter_subprocess place
+          start_subprocess place
 
         else
 
