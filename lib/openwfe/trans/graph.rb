@@ -150,7 +150,7 @@ module Trans
     def find_start_places
 
       pls = @places.dup
-      
+
       @transitions.values.each do |t|
         pls.delete t.to
       end
@@ -191,7 +191,7 @@ module Trans
     def to_dot
 
       s = ""
-      
+
       s << "digraph \"#{self.class.name}\" {\n"
       s << "rankdir=LR;\n"
       s << "size=\"8,5\";\n"

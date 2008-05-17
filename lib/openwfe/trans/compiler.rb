@@ -2,31 +2,31 @@
 #--
 # Copyright (c) 2008, John Mettraux, OpenWFE.org
 # All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without 
+#
+# Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # . Redistributions of source code must retain the above copyright notice, this
-#   list of conditions and the following disclaimer.  
-# 
-# . Redistributions in binary form must reproduce the above copyright notice, 
-#   this list of conditions and the following disclaimer in the documentation 
+#   list of conditions and the following disclaimer.
+#
+# . Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # . Neither the name of the "OpenWFE" nor the names of its contributors may be
 #   used to endorse or promote products derived from this software without
 #   specific prior written permission.
-# 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #++
 #
@@ -59,9 +59,9 @@ module Trans
 
         @graph = graph
 
-        @tree = [ 
-          'process-definition', 
-          { 'name' => 'none', 'revision' => 'none' }, 
+        @tree = [
+          'process-definition',
+          { 'name' => 'none', 'revision' => 'none' },
           [] ]
 
         @current_expression = @tree
@@ -81,7 +81,7 @@ module Trans
 
       def compile
 
-        @graph.find_start_places.each do |pl| 
+        @graph.find_start_places.each do |pl|
           handle_place pl
         end
 
@@ -100,17 +100,21 @@ module Trans
 
       def start (expname, atts={})
 
-        seq = [ expname, atts,  [] ]
-        current_children << seq
-        move_to seq
+        exp = [ expname, atts,  [] ]
+        current_children << exp
+        move_to exp
+        exp
       end
 
       def start_subprocess (place)
 
         start 'process-definition', { 'name' => place.eid }
 
+        pdef = @current_expression
+
         @graph.next_from(place).each do |pl|
           handle_place pl
+          move_to pdef
         end
       end
 
@@ -120,8 +124,8 @@ module Trans
 
         @seen_places << place.eid
 
-        part = [ 
-          'participant', 
+        part = [
+          'participant',
           { 'ref' => place.eid, 'activity' => place.label }, [] ]
 
         out = @graph.out_transitions place
@@ -131,7 +135,7 @@ module Trans
           start('sequence') unless current_exp_name == 'sequence'
 
           current_children << part
-          
+
           handle_place @graph.next_from(place).first
 
         elsif out.size > 1 and place.transition_types(:out) == [ :and ]
@@ -149,11 +153,12 @@ module Trans
 
         elsif out.size > 1
 
-          step = [ 
-            'step', 
-            { 
-              'step' => place.eid, 
-              'outcomes' => out.collect { |tr| tr.to }.join(", ") }, 
+          step = [
+            'step',
+            {
+              'step' => place.eid,
+              'outcomes' => out.collect { |tr| tr.to }.join(", "),
+              'activity' => place.label },
             [] ]
 
           current_children << step
