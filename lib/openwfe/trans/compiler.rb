@@ -137,16 +137,11 @@ module Trans
         exp
       end
 
-      def start_subprocess (place)
+      def wrap_in_subprocess (place)
 
+        return if @seen_places.include?(place.eid)
         start 'process-definition', { 'name' => place.eid }
-
-        pdef = @current_expression
-
-        @graph.next_from(place).each do |pl|
-          handle_place pl
-          move_to pdef
-        end
+        handle_place place
       end
 
       def handle_place (place)
@@ -201,14 +196,17 @@ module Trans
           step = Expression.new(
             'step',
             {
-              'step' => place.eid,
+              #'step' => place.eid,
+              'ref' => place.eid,
               'outcomes' => out.collect { |tr| tr.to }.join(", "),
               'activity' => place.label })
 
           @current_expression.children << step
 
-          move_to_root
-          start_subprocess place
+          @graph.next_from(place).each do |pl|
+            move_to_root
+            wrap_in_subprocess pl
+          end
 
         else
 
