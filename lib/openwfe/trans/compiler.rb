@@ -40,6 +40,48 @@
 module OpenWFE
 module Trans
 
+  class Expression < Array
+
+    def initialize (exp_name, attributes)
+      super([ exp_name, attributes, Children.new(self) ])
+    end
+
+    def name
+      self.first
+    end
+
+    def attributes
+      self[1]
+    end
+
+    def children
+      self.last
+    end
+
+    def parent= (expression)
+      @parent = expression
+    end
+
+    def parent (exp_name=nil)
+
+      return @parent if exp_name == nil
+      return nil if @parent == nil
+      return @parent if @parent.name == exp_name
+      @parent.parent(exp_name)
+    end
+  end
+
+  class Children < Array
+    def initialize (exp)
+      super()
+      @exp = exp
+    end
+    def << (expression)
+      expression.parent = @exp
+      super
+    end
+  end
+
   #
   # an initial, super-naive "compiler"
   #
@@ -59,24 +101,13 @@ module Trans
 
         @graph = graph
 
-        @tree = [
+        @tree = Expression.new(
           'process-definition',
-          { 'name' => 'none', 'revision' => 'none' },
-          [] ]
+          { 'name' => 'none', 'revision' => 'none' })
 
         @current_expression = @tree
 
         @seen_places = []
-      end
-
-      def current_exp_name
-
-        @current_expression.first
-      end
-
-      def current_children
-
-        @current_expression.last
       end
 
       def compile
@@ -100,8 +131,8 @@ module Trans
 
       def start (expname, atts={})
 
-        exp = [ expname, atts,  [] ]
-        current_children << exp
+        exp = Expression.new expname, atts
+        @current_expression.children << exp
         move_to exp
         exp
       end
@@ -124,23 +155,37 @@ module Trans
 
         @seen_places << place.eid
 
-        part = [
+        part = Expression.new(
           'participant',
-          { 'ref' => place.eid, 'activity' => place.label }, [] ]
+          { 'ref' => place.eid, 'activity' => place.label })
+
+        #
+        # considering incoming transitions
+
+        iin = @graph.in_transitions place
+
+        if iin.size > 1 #and place.transition_types(:in) == [ :and ]
+
+          con = @current_expression.parent 'concurrence'
+          move_to(con.parent) if con
+        end
+
+        #
+        # considering outgoing transitions
 
         out = @graph.out_transitions place
 
         if out.size == 1
 
-          start('sequence') unless current_exp_name == 'sequence'
+          start('sequence') unless @current_expression.name == 'sequence'
 
-          current_children << part
+          @current_expression.children << part
 
           handle_place @graph.next_from(place).first
 
         elsif out.size > 1 and place.transition_types(:out) == [ :and ]
 
-          current_children << part
+          @current_expression.children << part
 
           start('concurrence')
 
@@ -153,22 +198,21 @@ module Trans
 
         elsif out.size > 1
 
-          step = [
+          step = Expression.new(
             'step',
             {
               'step' => place.eid,
               'outcomes' => out.collect { |tr| tr.to }.join(", "),
-              'activity' => place.label },
-            [] ]
+              'activity' => place.label })
 
-          current_children << step
+          @current_expression.children << step
 
           move_to_root
           start_subprocess place
 
         else
 
-          current_children << part
+          @current_expression.children << part
         end
       end
   end
