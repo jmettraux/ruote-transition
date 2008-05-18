@@ -83,6 +83,14 @@ module Trans
 
       label_to_s.downcase.gsub(/ /, '_')
     end
+
+    #
+    # returns the participant / performer name or the place id
+    #
+    def participant
+
+      @attributes['participant'] || @eid
+    end
   end
 
   #

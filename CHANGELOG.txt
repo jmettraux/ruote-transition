@@ -1,0 +1,8 @@
+
+= ruote-transition CHANGELOG.txt
+
+
+== ruote-transition - 0.9.18    not yet released
+
+- initial release
+

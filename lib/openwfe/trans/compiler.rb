@@ -156,7 +156,9 @@ module Trans
 
         part = Expression.new(
           'participant',
-          { 'ref' => place.eid, 'activity' => place.label_to_s })
+          { 'ref' => place.participant,
+            'eid' => place.eid,
+            'activity' => place.label_to_s })
 
         #
         # considering incoming transitions
@@ -200,7 +202,8 @@ module Trans
           step = Expression.new(
             'step',
             {
-              'ref' => place.eid,
+              'eid' => place.eid,
+              'ref' => place.participant,
               'outcomes' => out.collect { |tr| "d_#{tr.to}" }.join(", "),
               'activity' => place.label })
 
