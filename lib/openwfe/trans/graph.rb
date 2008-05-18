@@ -57,6 +57,32 @@ module Trans
       @original_name = original_name
       @attributes = attributes
     end
+
+    #
+    # returns the label, but without CR and LF and double spaces
+    #
+    def label_to_s
+
+      return "" unless @label
+
+      @label.gsub(/[\n\r]/, ' ').gsub(/  */, ' ')
+    end
+
+    #
+    # used mainly by the to_dot routine
+    #
+    def label_and_id
+
+      "#{label_to_s} (#{@eid})".strip
+    end
+
+    #
+    # the label, but downcased and spaces are replaced by underscores
+    #
+    def label_compact
+
+      label_to_s.downcase.gsub(/ /, '_')
+    end
   end
 
   #
@@ -197,10 +223,10 @@ module Trans
       s << "digraph \"#{self.class.name}\" {\n"
       s << "rankdir=LR;\n"
       s << "size=\"8,5\";\n"
-      s << "node [shape = \"rectangle\", style = \"rounded\"];\n"
+      s << "node [ shape = \"rectangle\", style = \"rounded\" ];\n"
 
       @places.values.each do |pl|
-        s << "\"#{pl.eid}\" [ label = \"#{pl.label} (#{pl.eid})\" ];\n"
+        s << "\"#{pl.eid}\" [ label = \"#{pl.label_and_id}\" ];\n"
       end
 
       @transitions.values.each do |t|
@@ -211,7 +237,7 @@ module Trans
         split_xor = (details == [ :split, :xor ])
 
         s << "\"#{t.from}\" -> \"#{t.to}\""
-        s << " [ label = \"#{t.label} (#{t.eid})\""
+        s << " [ label = \"#{t.label_and_id}\""
         s << ", arrowtail = \"ediamond\"" if split_xor
         s << " ];\n"
       end
