@@ -240,7 +240,12 @@ module Trans
       @transitions.values.each do |t|
 
         from_place = @places[t.from]
-        details = from_place ? from_place.transition_details[t.eid] : nil
+
+        details = if from_place
+          from_place.transition_details[t.eid] || from_place.transition_details[:all]
+        else
+          nil
+        end
 
         split_xor = (details == [ :split, :xor ])
 

@@ -22,9 +22,9 @@ oformat = 'xml'
 
 opts = OptionParser.new
 
-opts.banner = "Usage: bin/xpdl_to_owfe {xpdl_file_path}"
+opts.banner = "Usage: bin/to_owfe [options] {filename}"
 opts.separator ""
-opts.separator "attempts to turn an XPDL file to an OpenWFEru process definition"
+opts.separator "attempts to turn an XPDL (or YAWL) file to an OpenWFEru process definition"
 opts.separator ""
 opts.separator "options:"
 
