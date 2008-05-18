@@ -1,0 +1,9 @@
+<process-definition name='hello world'>
+  <start-state name='start'>
+    <transition to='s' />
+  </start-state>
+  <state name='s'>
+    <transition to='end' />
+  </state>
+  <end-state name='end' />
+</process-definition>"

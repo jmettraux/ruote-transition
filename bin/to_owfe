@@ -8,6 +8,7 @@ require 'optparse'
 require 'yaml'
 
 require 'openwfe/trans/xpdl'
+require 'openwfe/trans/yawl'
 require 'openwfe/trans/compiler'
 
 require 'rubygems'
@@ -16,7 +17,8 @@ require 'openwfe/expool/parser'
 #
 # parse options
 
-format = 'xml'
+iformat = 'xpdl'
+oformat = 'xml'
 
 opts = OptionParser.new
 
@@ -26,8 +28,11 @@ opts.separator "attempts to turn an XPDL file to an OpenWFEru process definition
 opts.separator ""
 opts.separator "options:"
 
-opts.on("-F", "--format {f}", "output format : xml|ruby|yaml|json") do |f|
-  format = f[0, 1]
+opts.on("-i", "--input {f}", "input format : xpdl|yawl") do |f|
+  iformat = f[0, 1]
+end
+opts.on("-o", "--output {f}", "output format : xml|ruby|yaml|json|dot") do |f|
+  oformat = f[0, 1]
 end
 
 opts.on("-h", "--help", "display this help content") do
@@ -51,11 +56,24 @@ end
 #
 # do the job
 
-graphs = OpenWFE::Trans::XPDL.parse opts_rest.first
+graphs = case iformat
+  when 'x'
+    OpenWFE::Trans::XPDL.parse opts_rest.first
+  when 'y'
+    OpenWFE::Trans::YAWL.parse opts_rest.first
+  else
+    $stderr.puts "unknow input format"
+    exit 2
+end
+
+if oformat == 'd'
+  puts graphs.first.to_dot
+  exit 0
+end
 
 tree = OpenWFE::Trans::StepCompiler.compile(graphs.first)
 
-case format
+case oformat
   when 'x'
     puts OpenWFE::ExpressionTree.to_s(tree, 3)
   when 'r'
