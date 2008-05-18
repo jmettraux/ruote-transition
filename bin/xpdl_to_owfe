@@ -5,26 +5,68 @@ $: << './lib'
 
 require 'optparse'
 
+require 'yaml'
+
 require 'openwfe/trans/xpdl'
 require 'openwfe/trans/compiler'
 
 require 'rubygems'
 require 'openwfe/expool/parser'
 
+#
+# parse options
 
-if ARGV.length < 1
+format = 'xml'
+
+opts = OptionParser.new
+
+opts.banner = "Usage: bin/xpdl_to_owfe {xpdl_file_path}"
+opts.separator ""
+opts.separator "attempts to turn an XPDL file to an OpenWFEru process definition"
+opts.separator ""
+opts.separator "options:"
+
+opts.on("-F", "--format {f}", "output format : xml|ruby|yaml|json") do |f|
+  format = f[0, 1]
+end
+
+opts.on("-h", "--help", "display this help content") do
   puts
-  puts "  bin/xpdl_to_owfe {xpdl_file_path}"
+  puts opts.to_s
   puts
-  puts "    attempts to turn an XPDL file to an OpenWFEru process definition"
+  exit 0
+end
+
+opts_rest = opts.parse(ARGV)
+
+if opts_rest.size < 1
+  puts
+  puts "file name is missing..."
+  puts
+  puts opts.to_s
   puts
   exit 1
 end
 
-graphs = OpenWFE::Trans::XPDL.parse ARGV[0]
+#
+# do the job
+
+graphs = OpenWFE::Trans::XPDL.parse opts_rest.first
 
 tree = OpenWFE::Trans::StepCompiler.compile(graphs.first)
 
-puts OpenWFE::ExpressionTree.to_s(tree, 3)
-
+case format
+  when 'x'
+    puts OpenWFE::ExpressionTree.to_s(tree, 3)
+  when 'r'
+    puts OpenWFE::ExpressionTree.to_code_s(tree)
+  when 'y'
+    puts tree.to_yaml
+  when 'j'
+    require 'json'
+    puts tree.to_json
+  else
+    $stderr.puts "unknown format '#{format}'"
+    exit 1
+end
 

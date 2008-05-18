@@ -58,6 +58,10 @@ module Trans
       self.last
     end
 
+    def children= (cs)
+      self[2] = cs
+    end
+
     def parent= (expression)
       @parent = expression
     end
@@ -116,7 +120,7 @@ module Trans
           handle_place pl
         end
 
-        @tree
+        clean_tree(@tree)
       end
 
       def move_to (expression)
@@ -211,6 +215,24 @@ module Trans
 
           @current_expression.children << part
         end
+      end
+
+      #
+      # clean the tree, for example, eliminates sequence that have only
+      # one child (use the child directly).
+      #
+      def clean_tree (branch)
+
+        branch.children = branch.children.inject(Children.new(branch)) do |r, c|
+          cc = if c.name == 'sequence' and c.children.size == 1
+            c.children.first
+          else
+            c
+          end
+          r << clean_tree(cc)
+        end
+
+        branch
       end
   end
 
