@@ -70,6 +70,10 @@ if oformat == 'd'
   puts graphs.first.to_dot
   exit 0
 end
+if oformat == 'i'
+  puts graphs.first.inspect
+  exit 0
+end
 
 tree = OpenWFE::Trans::StepCompiler.compile(graphs.first)
 

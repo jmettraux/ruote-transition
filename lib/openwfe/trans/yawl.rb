@@ -98,8 +98,19 @@ module OpenWFE::Trans
           graph << transition
         end
 
-        parser.listen(:characters) do |text| # very minimalistic...
+        parser.listen(:start_element, ['split', 'join']) do |u, l, q, a|
+
+          place.transition_details[:all] =
+            [ l.to_sym, a['code'].downcase.to_sym ]
         end
+
+        parser.listen(:start_element, ['decomposesTo']) do |u, l, q, a|
+          # TODO
+          # <-> performer / participant ?
+        end
+
+        #parser.listen(:characters) do |text| # very minimalistic...
+        #end
 
         # parse now
 
