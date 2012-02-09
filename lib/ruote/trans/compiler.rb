@@ -28,7 +28,7 @@ module Trans
 
   class Expression < Array
 
-    def initialize (exp_name, attributes)
+    def initialize(exp_name, attributes)
       super([ exp_name, attributes, Children.new(self) ])
     end
 
@@ -52,7 +52,7 @@ module Trans
       @parent = expression
     end
 
-    def parent (exp_name=nil)
+    def parent(exp_name=nil)
 
       return @parent if exp_name == nil
       return nil if @parent == nil
@@ -62,7 +62,7 @@ module Trans
   end
 
   class Children < Array
-    def initialize (exp)
+    def initialize(exp)
       super()
       @exp = exp
     end
@@ -79,149 +79,148 @@ module Trans
 
     # compiles a graph to a ruote tree
     #
-    def self.compile (graph)
+    def self.compile(graph)
 
       StepCompiler.new(graph).send :compile
     end
 
     protected
 
-      def initialize (graph)
+    def initialize(graph)
 
-        @graph = graph
+      @graph = graph
 
-        @tree = Expression.new(
-          'process-definition',
-          { 'name' => 'none', 'revision' => 'none' })
+      @tree = Expression.new(
+        'process-definition',
+        { 'name' => 'none', 'revision' => 'none' })
 
-        @current_expression = @tree
+      @current_expression = @tree
 
-        @seen_places = []
+      @seen_places = []
+    end
+
+    def compile
+
+      @graph.find_start_places.each do |pl|
+        handle_place pl
       end
 
-      def compile
+      clean_tree(@tree)
+    end
 
-        @graph.find_start_places.each do |pl|
+    def move_to (expression)
+
+      @current_expression = expression
+    end
+
+    def move_to_root
+
+      move_to @tree
+    end
+
+    def start(expname, atts={})
+
+      exp = Expression.new expname, atts
+      @current_expression.children << exp
+      move_to exp
+      exp
+    end
+
+    def wrap_in_subprocess (place)
+
+      return if @seen_places.include?(place.eid)
+      start 'process-definition', { 'name' => "d_#{place.eid}" }
+      handle_place place
+    end
+
+    def handle_place (place)
+
+      return if @seen_places.include?(place.eid)
+
+      @seen_places << place.eid
+
+      part = Expression.new(
+        'participant',
+        { 'ref' => place.participant,
+          'eid' => place.eid,
+          'activity' => place.label_to_s })
+
+      #
+      # considering incoming transitions
+
+      iin = @graph.in_transitions place
+
+      if iin.size > 1 #and place.transition_types(:in) == [ :and ]
+
+        con = @current_expression.parent 'concurrence'
+        move_to(con.parent) if con
+      end
+
+      #
+      # considering outgoing transitions
+
+      out = @graph.out_transitions place
+
+      if out.size == 1
+
+        start('sequence') unless @current_expression.name == 'sequence'
+
+        @current_expression.children << part
+
+        handle_place @graph.next_from(place).first
+
+      elsif out.size > 1 and place.transition_types(:out) == [ :and ]
+
+        @current_expression.children << part
+
+        start('concurrence')
+
+        con = @current_expression
+
+        @graph.next_from(place).each do |pl|
           handle_place pl
+          move_to con
         end
 
-        clean_tree(@tree)
-      end
+      elsif out.size > 1
 
-      def move_to (expression)
-
-        @current_expression = expression
-      end
-
-      def move_to_root
-
-        move_to @tree
-      end
-
-      def start (expname, atts={})
-
-        exp = Expression.new expname, atts
-        @current_expression.children << exp
-        move_to exp
-        exp
-      end
-
-      def wrap_in_subprocess (place)
-
-        return if @seen_places.include?(place.eid)
-        start 'process-definition', { 'name' => "d_#{place.eid}" }
-        handle_place place
-      end
-
-      def handle_place (place)
-
-        return if @seen_places.include?(place.eid)
-
-        @seen_places << place.eid
-
-        part = Expression.new(
-          'participant',
-          { 'ref' => place.participant,
+        step = Expression.new(
+          'step',
+          {
             'eid' => place.eid,
-            'activity' => place.label_to_s })
+            'ref' => place.participant,
+            'outcomes' => out.collect { |tr| "d_#{tr.to}" }.join(", "),
+            'activity' => place.label })
 
-        #
-        # considering incoming transitions
+        @current_expression.children << step
 
-        iin = @graph.in_transitions place
-
-        if iin.size > 1 #and place.transition_types(:in) == [ :and ]
-
-          con = @current_expression.parent 'concurrence'
-          move_to(con.parent) if con
+        @graph.next_from(place).each do |pl|
+          move_to_root
+          wrap_in_subprocess pl
         end
 
-        #
-        # considering outgoing transitions
+      else
 
-        out = @graph.out_transitions place
+        @current_expression.children << part
+      end
+    end
 
-        if out.size == 1
+    # clean the tree, for example, eliminates sequence that have only
+    # one child (use the child directly).
+    #
+    def clean_tree (branch)
 
-          start('sequence') unless @current_expression.name == 'sequence'
-
-          @current_expression.children << part
-
-          handle_place @graph.next_from(place).first
-
-        elsif out.size > 1 and place.transition_types(:out) == [ :and ]
-
-          @current_expression.children << part
-
-          start('concurrence')
-
-          con = @current_expression
-
-          @graph.next_from(place).each do |pl|
-            handle_place pl
-            move_to con
-          end
-
-        elsif out.size > 1
-
-          step = Expression.new(
-            'step',
-            {
-              'eid' => place.eid,
-              'ref' => place.participant,
-              'outcomes' => out.collect { |tr| "d_#{tr.to}" }.join(", "),
-              'activity' => place.label })
-
-          @current_expression.children << step
-
-          @graph.next_from(place).each do |pl|
-            move_to_root
-            wrap_in_subprocess pl
-          end
-
+      branch.children = branch.children.inject(Children.new(branch)) do |r, c|
+        cc = if c.name == 'sequence' and c.children.size == 1
+          c.children.first
         else
-
-          @current_expression.children << part
+          c
         end
+        r << clean_tree(cc)
       end
 
-      #
-      # clean the tree, for example, eliminates sequence that have only
-      # one child (use the child directly).
-      #
-      def clean_tree (branch)
-
-        branch.children = branch.children.inject(Children.new(branch)) do |r, c|
-          cc = if c.name == 'sequence' and c.children.size == 1
-            c.children.first
-          else
-            c
-          end
-          r << clean_tree(cc)
-        end
-
-        branch
-      end
+      branch
+    end
   end
 end
 end

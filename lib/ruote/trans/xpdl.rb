@@ -33,7 +33,7 @@ module Ruote::Trans
 
   module XPDL
 
-    def self.parse (filename)
+    def self.parse(filename)
 
       File.open(filename, 'r') do |f|
 

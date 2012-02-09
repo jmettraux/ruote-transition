@@ -36,7 +36,7 @@ module Trans
     attr_accessor :original_name
     attr_accessor :attributes
 
-    def initialize (eid, label, original_name, attributes)
+    def initialize(eid, label, original_name, attributes)
 
       @eid = eid
       @label = label
@@ -44,7 +44,6 @@ module Trans
       @attributes = attributes
     end
 
-    #
     # returns the label, but without CR and LF and double spaces
     #
     def label_to_s
@@ -54,7 +53,6 @@ module Trans
       @label.gsub(/[\n\r]/, ' ').gsub(/  */, ' ')
     end
 
-    #
     # used mainly by the to_dot routine
     #
     def label_and_id
@@ -62,7 +60,6 @@ module Trans
       "#{label_to_s} (#{@eid})".strip
     end
 
-    #
     # the label, but downcased and spaces are replaced by underscores
     #
     def label_compact
@@ -70,7 +67,6 @@ module Trans
       label_to_s.downcase.gsub(/ /, '_')
     end
 
-    #
     # returns the participant / performer name or the place id
     #
     def participant
@@ -84,13 +80,12 @@ module Trans
   #
   class Place < Element
 
-    #
     # storing info like { transition_eid => [ :split, :and ] }
     #
     attr_accessor :transition_details
 
 
-    def initialize (eid, label, original_name, attributes)
+    def initialize(eid, label, original_name, attributes)
 
       super
 
@@ -124,7 +119,6 @@ module Trans
   #
   class Graph
 
-    #
     # the attributes of the graph itself
     #
     attr_accessor :attributes
@@ -132,7 +126,6 @@ module Trans
     attr_accessor :places
     attr_accessor :transitions
 
-    #
     # things that are not places nor transitions
     #
     attr_accessor :others
@@ -144,7 +137,6 @@ module Trans
       @transitions = {}
     end
 
-    #
     # accepts Place and Transition instances. Other kind of instances will
     # be placed in the "others" array.
     #
@@ -164,7 +156,6 @@ module Trans
       end
     end
 
-    #
     # returns places that have no incoming transitions
     #
     def find_start_places
@@ -172,7 +163,6 @@ module Trans
       find_end_or_start true
     end
 
-    #
     # returns places that have no outgoing transitions
     #
     def find_end_places
@@ -180,7 +170,6 @@ module Trans
       find_end_or_start false
     end
 
-    #
     # given a place, lists outgoing transitions
     #
     def out_transitions (place)
@@ -188,7 +177,6 @@ module Trans
       transitions.values.select { |tr| tr.from == place.eid }
     end
 
-    #
     # given a place, lists incoming transitions
     #
     def in_transitions (place)
@@ -196,7 +184,6 @@ module Trans
       transitions.values.select { |tr| tr.to == place.eid }
     end
 
-    #
     # returns the next place from the given one, will follow the first
     # transition available.
     #
@@ -205,7 +192,6 @@ module Trans
       out_transitions(place).collect { |tr| @places[tr.to] }
     end
 
-    #
     # outputs the graph in the DOT format
     #
     # http://graphviz.org
@@ -248,20 +234,19 @@ module Trans
 
     protected
 
-      #
-      # returns places that have no incoming transitions (start=true)
-      # or that have no outgoing transitions (start=false)
-      #
-      def find_end_or_start (start=true)
+    # returns places that have no incoming transitions (start=true)
+    # or that have no outgoing transitions (start=false)
+    #
+    def find_end_or_start (start=true)
 
-        pls = @places.dup
+      pls = @places.dup
 
-        @transitions.values.each do |t|
-          pls.delete(start ? t.to : t.from)
-        end
-
-        pls.values
+      @transitions.values.each do |t|
+        pls.delete(start ? t.to : t.from)
       end
+
+      pls.values
+    end
   end
 end
 end
