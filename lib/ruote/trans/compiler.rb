@@ -129,7 +129,7 @@ module Trans
     def wrap_in_subprocess (place)
 
       return if @seen_places.include?(place.eid)
-      start 'process-definition', { 'name' => "d_#{place.eid}" }
+      start 'define', { "d_#{place.eid}" => nil }
       handle_place place
     end
 
@@ -140,10 +140,9 @@ module Trans
       @seen_places << place.eid
 
       part = Expression.new(
-        'participant',
-        { 'ref' => place.participant,
-          'eid' => place.eid,
-          'activity' => place.label_to_s })
+        'participant', { place.participant => nil, 'eid' => place.eid })
+
+      part.attributes['activity'] = place.label_to_s if place.label
 
       #
       # considering incoming transitions
