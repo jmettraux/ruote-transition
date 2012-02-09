@@ -26,12 +26,12 @@
 require 'rexml/parsers/sax2parser'
 require 'rexml/sax2listener'
 
-require 'openwfe/trans/graph'
+require 'ruote/trans/graph'
 
 
-module OpenWFE::Trans
+module Ruote::Trans
 
-  module YAWL
+  module XPDL
 
     def self.parse (filename)
 
@@ -45,57 +45,68 @@ module OpenWFE::Trans
 
         graph = nil
         place = nil
-
-        transition_id = 0
+        transition = nil
+        t_restriction = nil
+        performer = nil
 
         # registering the listeners
 
         # u, l, q, a <=> url, local, qname, attributes
 
-        parser.listen(:start_element, ['processControlElements']) do |u, l, q, a|
+        parser.listen(:start_element, ['WorkflowProcess']) do |u, l, q, a|
           graph = Graph.new
           graphs << graph
         end
 
-        parser.listen(:start_element, ['inputCondition', 'outputCondition']) do |u, l, q, a|
+        #parser.listen(:end_element, ['WorkflowProcess']) do |u, l, q, a|
+        #end
 
-          place = Place.new a['id'], a['id'], l, a
+        parser.listen(:start_element, ['Activity']) do |u, l, q, a|
+
+          place = Place.new a['Id'], a['Name'], l, a
           graph << place
         end
 
-        parser.listen(:start_element, ['task']) do |u, l, q, a|
+        parser.listen(:start_element, ['Split', 'Join']) do |u, l, q, a|
 
-          place = Place.new a['id'], a['id'], l, a
-          graph << place
+          t_restriction = [ l.downcase.to_sym, a['Type'].downcase.to_sym ]
         end
 
-        parser.listen(:start_element, ['nextElementRef']) do |u, l, q, a|
+        parser.listen(:start_element, ['TransitionRef']) do |u, l, q, a|
 
-          tid = "t_#{transition_id}"
+          place.transition_details[a['Id']] = t_restriction #.dup() ...
+        end
 
-          transition = Transition.new tid, tid, l, a
+        parser.listen(:start_element, ['Transition']) do |u, l, q, a|
 
-          transition_id += 1
-
-          transition.from = place.eid
-          transition.to = a['id']
-
+          transition = Transition.new a['Id'], a['Name'], l, a
+          transition.from = a['From']
+          transition.to = a['To']
           graph << transition
         end
 
-        parser.listen(:start_element, ['split', 'join']) do |u, l, q, a|
+        parser.listen(:start_element, ['Condition']) do |u, l, q, a|
 
-          place.transition_details[:all] =
-            [ l.to_sym, a['code'].downcase.to_sym ]
+          transition.condition = { :type => a['Type'] }
         end
 
-        parser.listen(:start_element, ['decomposesTo']) do |u, l, q, a|
-          # TODO
-          # <-> performer / participant ?
+        parser.listen(:start_element, ['Performer']) do |u, l, q, a|
+
+          performer = true
         end
 
-        #parser.listen(:characters) do |text| # very minimalistic...
-        #end
+        parser.listen(:characters) do |text| # very minimalistic...
+
+          if performer
+
+            place.attributes['participant'] = text
+            performer = nil
+
+          elsif transition and transition.condition and text.strip != ""
+
+            transition.condition[:expression] = text \
+          end
+        end
 
         # parse now
 
@@ -105,5 +116,5 @@ module OpenWFE::Trans
       end
     end
   end
-
 end
+

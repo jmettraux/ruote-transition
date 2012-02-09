@@ -23,7 +23,7 @@
 #++
 
 
-module OpenWFE
+module Ruote
 module Trans
 
   class Expression < Array
@@ -77,8 +77,7 @@ module Trans
   #
   class StepCompiler
 
-    #
-    # compiles a graph to an OpenWFEru tree
+    # compiles a graph to a ruote tree
     #
     def self.compile (graph)
 
@@ -224,7 +223,6 @@ module Trans
         branch
       end
   end
-
 end
 end
 
