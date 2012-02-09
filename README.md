@@ -1,21 +1,21 @@
 
-= ruote-transition
+# ruote-transition
 
 
-== overview
+## overview
 
 a small project about turning place-transition based process definitions to OpenWFEru process definitions.
 
 For now, is able to parse XPDL (http://www.wfmc.org/standards/xpdl.htm) and YAWL (http://www.yawl-system.com/)
 
-== get it
+## get it
 
     git clone git://github.com/jmettraux/ruote-transition.git
 
 (depends on OpenWFEru - http://github.com/jmettraux/ruote)
 
 
-== run it
+## run it
 
     ./bin/to_owfe -h
 
@@ -24,21 +24,19 @@ For now, is able to parse XPDL (http://www.wfmc.org/standards/xpdl.htm) and YAWL
     ./bin/to_owfe -o dot -i xpdl test/xpdl/troubleticket.xpdl
 
 
-== Links
+## Links
 
-http://openwferu.rubyforge.org
-http://rubyforge.org/projects/openwferu
+http://ruote.rubyforge.org
+https://github.com/jmettraux/ruote
 
 
-== license
+## license
 
-BSD
+MIT
 
 
 == feedback
 
-user mailing list :        http://groups.google.com/group/openwferu-users
-developers mailing list :  http://groups.google.com/group/openwferu-dev
-
-issue tracker :            http://rubyforge.org/tracker/?atid=10023&group_id=2609&func=browse
+mailing list :  http://groups.google.com/group/openwferu-users
+issue tracker : https://github.com/jmettraux/ruote-transition/issues
 
