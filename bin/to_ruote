@@ -12,7 +12,7 @@ require 'ruote/trans/yawl'
 require 'ruote/trans/compiler'
 
 require 'rubygems'
-require 'openwfe/expool/parser'
+require 'ruote/reader'
 
 #
 # parse options
@@ -79,9 +79,9 @@ tree = Ruote::Trans::StepCompiler.compile(graphs.first)
 
 case oformat
   when 'x'
-    puts Ruote::ExpressionTree.to_s(tree, 3)
+    puts Ruote::Reader.to_s(tree, 3)
   when 'r'
-    puts Ruote::ExpressionTree.to_code_s(tree)
+    puts Ruote::Reader.to_ruby(tree)
   when 'y'
     puts tree.to_yaml
   when 'j'
