@@ -28,8 +28,11 @@ module Trans
 
   class Expression < Array
 
-    def initialize(exp_name, attributes)
+    def initialize(exp_name, attributes, children=[])
       super([ exp_name, attributes, Children.new(self) ])
+      children.each do |c|
+        self.last << Expression.new(c[0], c[1], c[2])
+      end
     end
 
     def name
@@ -44,11 +47,11 @@ module Trans
       self.last
     end
 
-    def children= (cs)
+    def children=(cs)
       self[2] = cs
     end
 
-    def parent= (expression)
+    def parent=(expression)
       @parent = expression
     end
 
@@ -66,7 +69,7 @@ module Trans
       super()
       @exp = exp
     end
-    def << (expression)
+    def <<(expression)
       expression.parent = @exp
       super
     end
@@ -81,17 +84,22 @@ module Trans
     #
     def self.compile(graph)
 
-      StepCompiler.new(graph).send :compile
+      StepCompiler.new(graph).send(:compile)
     end
 
     protected
+
+    STEP = Ruote.define 'step' do
+      participant "${v:ref}", :activity => "${v:activity}"
+      subprocess "${f:next}"
+    end
 
     def initialize(graph)
 
       @graph = graph
 
       @tree = Expression.new(
-        'define', { 'name' => 'none', 'revision' => 'none' })
+        'define', { 'name' => 'none', 'revision' => 'none' }, [ STEP ])
 
       @current_expression = @tree
 
@@ -125,14 +133,14 @@ module Trans
       exp
     end
 
-    def wrap_in_subprocess (place)
+    def wrap_in_subprocess(place)
 
       return if @seen_places.include?(place.eid)
       start 'define', { "d_#{place.eid}" => nil }
       handle_place place
     end
 
-    def handle_place (place)
+    def handle_place(place)
 
       return if @seen_places.include?(place.eid)
 
@@ -206,7 +214,7 @@ module Trans
     # clean the tree, for example, eliminates sequence that have only
     # one child (use the child directly).
     #
-    def clean_tree (branch)
+    def clean_tree(branch)
 
       branch.children = branch.children.inject(Children.new(branch)) do |r, c|
         cc = if c.name == 'sequence' and c.children.size == 1

@@ -13,11 +13,12 @@ require 'optparse'
 
 require 'yaml'
 
+require 'ruote/reader'
+
 require 'ruote/trans/xpdl'
 require 'ruote/trans/yawl'
 require 'ruote/trans/compiler'
 
-require 'ruote/reader'
 
 #
 # parse options
