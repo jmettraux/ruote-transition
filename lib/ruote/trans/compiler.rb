@@ -91,8 +91,7 @@ module Trans
       @graph = graph
 
       @tree = Expression.new(
-        'process-definition',
-        { 'name' => 'none', 'revision' => 'none' })
+        'define', { 'name' => 'none', 'revision' => 'none' })
 
       @current_expression = @tree
 

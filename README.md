@@ -13,12 +13,14 @@ For now, is able to parse XPDL (http://www.wfmc.org/standards/xpdl.htm) and YAWL
 
     git clone git://github.com/jmettraux/ruote-transition.git
 
-(depends on ruote - https://github.com/jmettraux/ruote)
+    cd ruote-transition
+    bundle install
 
+(I tend to do "bundle install --path .bundle")
 
 ## run it
 
-    ./bin/to_ruote -h
+    ./bin/to_ruote --help
 
     ./bin/to_ruote -o ruby -i xpdl test/xpdl/troubleticket.xpdl
     ./bin/to_ruote -o xml -i yawl test/yawl/sample.yawl

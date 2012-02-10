@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
 
-$: << '../ruote/lib'
-$: << './lib'
+require 'rubygems'
+begin
+  require 'bundler/setup'
+rescue LoadError => le
+  $: << '../ruote/lib'
+end
+
+$: << File.expand_path('../../lib', __FILE__)
 
 require 'optparse'
 
@@ -11,7 +17,6 @@ require 'ruote/trans/xpdl'
 require 'ruote/trans/yawl'
 require 'ruote/trans/compiler'
 
-require 'rubygems'
 require 'ruote/reader'
 
 #
