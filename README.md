@@ -4,9 +4,14 @@
 
 ## overview
 
-a small project about turning place-transition based process definitions to ruote process definitions.
+An experimental project. Turns place-transition based process definitions to ruote process definitions.
 
 For now, is able to parse XPDL (http://www.wfmc.org/standards/xpdl.htm) and YAWL (http://www.yawl-system.com/)
+
+
+## note
+
+The process definitions created by this tool are not very efficient. Nothing beats analyzing the process and re-writing it [manually].
 
 
 ## get it

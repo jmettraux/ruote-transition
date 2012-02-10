@@ -1,0 +1,5 @@
+
+[ ] make it smarter
+    the "step" construct is too resource consuming, it creates too much
+    expressions, long processes are long chain of waiting workflows...
+
