@@ -32,7 +32,7 @@ The process definitions created by this tool are not very efficient. Nothing bea
     ./bin/to_ruote -o dot -i xpdl test/xpdl/troubleticket.xpdl
 
 
-## Links
+## links
 
 http://ruote.rubyforge.org
 https://github.com/jmettraux/ruote
